@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package likes;
+
+option go_package = "likes_service";
+
+service LikesService {
+  rpc AddLikes(AddLikesRequest) returns (AddLikesResponse);
+  rpc DelLikes(DelLikesRequest) returns (DelLikesResponse);
+}
+
+message AddLikesRequest {
+  uint64 uid = 1;
+  uint64 pid = 2;
+}
+
+message AddLikesResponse {
+  int64 status = 1;
+  string msg = 2;
+}
+
+message DelLikesRequest {
+  uint64 uid = 1;
+  uint64 pid = 2;
+}
+
+message DelLikesResponse {
+  int64 status = 1;
+  string msg = 2;
+}
