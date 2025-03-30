@@ -1,14 +1,14 @@
 package module
 
 type Likes struct {
-	Pid uint64 `gorm:"column:pid;primaryKey" json:"pid"`
-	Uid uint64 `gorm:"column:uid;not null" json:"uid"`
+	Pid int64 `gorm:"column:pid;primaryKey" json:"pid"`
+	Uid int64 `gorm:"column:uid;not null" json:"uid"`
 }
 
-type Tabler interface {
-	TableName() string
+type PUTable interface {
+	PUTableName() string
 }
 
-func (l *Likes) TableName() string {
+func (l *Likes) PUTableName() string {
 	return "likes"
 }

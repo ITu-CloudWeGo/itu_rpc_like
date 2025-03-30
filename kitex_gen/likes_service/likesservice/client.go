@@ -13,6 +13,8 @@ import (
 type Client interface {
 	AddLikes(ctx context.Context, Req *likes_service.AddLikesRequest, callOptions ...callopt.Option) (r *likes_service.AddLikesResponse, err error)
 	DelLikes(ctx context.Context, Req *likes_service.DelLikesRequest, callOptions ...callopt.Option) (r *likes_service.DelLikesResponse, err error)
+	CreateLikes(ctx context.Context, Req *likes_service.CreateLikesRequest, callOptions ...callopt.Option) (r *likes_service.CreateLikesResponse, err error)
+	GetLikesCount(ctx context.Context, Req *likes_service.GetLikesCountRequest, callOptions ...callopt.Option) (r *likes_service.GetLikesCountResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +54,14 @@ func (p *kLikesServiceClient) AddLikes(ctx context.Context, Req *likes_service.A
 func (p *kLikesServiceClient) DelLikes(ctx context.Context, Req *likes_service.DelLikesRequest, callOptions ...callopt.Option) (r *likes_service.DelLikesResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.DelLikes(ctx, Req)
+}
+
+func (p *kLikesServiceClient) CreateLikes(ctx context.Context, Req *likes_service.CreateLikesRequest, callOptions ...callopt.Option) (r *likes_service.CreateLikesResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.CreateLikes(ctx, Req)
+}
+
+func (p *kLikesServiceClient) GetLikesCount(ctx context.Context, Req *likes_service.GetLikesCountRequest, callOptions ...callopt.Option) (r *likes_service.GetLikesCountResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetLikesCount(ctx, Req)
 }

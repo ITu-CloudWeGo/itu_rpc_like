@@ -9,28 +9,28 @@ import (
 	"sync"
 )
 
-type LikesDaoImpl struct {
+type LikesDao struct {
 	db *gorm.DB
 }
 
-type LikesDao interface {
+type LikesDaoImpl interface {
 	Insert(tags *module.Likes) error
-	DelLikes(pid, uid uint64) error
-	CheckLikes(pid, uid uint64) (bool, error)
+	DelLikes(pid, uid int64) error
+	CheckLikes(pid, uid int64) (bool, error)
 }
 
 var (
-	instanceDAO      *LikesDaoImpl
-	onceLikesDaoImpl sync.Once
+	instanceLikesDAO *LikesDao
+	onceLikesDao     sync.Once
 )
 
-func GetLikesDaoImpl() LikesDao {
-	onceLikesDaoImpl.Do(func() {
-		instanceDAO = CreateDB()
+func GetLikesDao() LikesDaoImpl {
+	onceLikesDao.Do(func() {
+		instanceLikesDAO = createDB()
 	})
-	return instanceDAO
+	return instanceLikesDAO
 }
-func CreateDB() *LikesDaoImpl {
+func createDB() *LikesDao {
 	conf := config.Config{}
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
 		conf.PostgresSQL.Host,
@@ -47,16 +47,16 @@ func CreateDB() *LikesDaoImpl {
 	if err != nil {
 		panic(fmt.Sprintf("failed to migrate database: %v", err))
 	}
-	instanceDAO = &LikesDaoImpl{
+	instanceLikesDAO = &LikesDao{
 		db: db,
 	}
-	return instanceDAO
+	return instanceLikesDAO
 }
-func (dao *LikesDaoImpl) Insert(tags *module.Likes) error {
+func (dao *LikesDao) Insert(tags *module.Likes) error {
 	return dao.db.Create(tags).Error
 }
 
-func (dao *LikesDaoImpl) DelLikes(pid, uid uint64) error {
+func (dao *LikesDao) DelLikes(pid, uid int64) error {
 	tags := &module.Likes{
 		Pid: pid,
 		Uid: uid,
@@ -64,7 +64,7 @@ func (dao *LikesDaoImpl) DelLikes(pid, uid uint64) error {
 	return dao.db.Where("pid = ? AND uid =?", pid, tags).Delete(tags).Error
 }
 
-func (dao *LikesDaoImpl) CheckLikes(pid, uid uint64) (bool, error) {
+func (dao *LikesDao) CheckLikes(pid, uid int64) (bool, error) {
 
 	exist := dao.db.Where("pid = ? AND uid =?", pid, uid)
 	if exist != nil {

@@ -29,6 +29,20 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"CreateLikes": kitex.NewMethodInfo(
+		createLikesHandler,
+		newCreateLikesArgs,
+		newCreateLikesResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"GetLikesCount": kitex.NewMethodInfo(
+		getLikesCountHandler,
+		newGetLikesCountArgs,
+		newGetLikesCountResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -401,6 +415,312 @@ func (p *DelLikesResult) GetResult() interface{} {
 	return p.Success
 }
 
+func createLikesHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(likes_service.CreateLikesRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(likes_service.LikesService).CreateLikes(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *CreateLikesArgs:
+		success, err := handler.(likes_service.LikesService).CreateLikes(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*CreateLikesResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newCreateLikesArgs() interface{} {
+	return &CreateLikesArgs{}
+}
+
+func newCreateLikesResult() interface{} {
+	return &CreateLikesResult{}
+}
+
+type CreateLikesArgs struct {
+	Req *likes_service.CreateLikesRequest
+}
+
+func (p *CreateLikesArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(likes_service.CreateLikesRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *CreateLikesArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *CreateLikesArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *CreateLikesArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *CreateLikesArgs) Unmarshal(in []byte) error {
+	msg := new(likes_service.CreateLikesRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var CreateLikesArgs_Req_DEFAULT *likes_service.CreateLikesRequest
+
+func (p *CreateLikesArgs) GetReq() *likes_service.CreateLikesRequest {
+	if !p.IsSetReq() {
+		return CreateLikesArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *CreateLikesArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *CreateLikesArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type CreateLikesResult struct {
+	Success *likes_service.CreateLikesResponse
+}
+
+var CreateLikesResult_Success_DEFAULT *likes_service.CreateLikesResponse
+
+func (p *CreateLikesResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(likes_service.CreateLikesResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *CreateLikesResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *CreateLikesResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *CreateLikesResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *CreateLikesResult) Unmarshal(in []byte) error {
+	msg := new(likes_service.CreateLikesResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *CreateLikesResult) GetSuccess() *likes_service.CreateLikesResponse {
+	if !p.IsSetSuccess() {
+		return CreateLikesResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *CreateLikesResult) SetSuccess(x interface{}) {
+	p.Success = x.(*likes_service.CreateLikesResponse)
+}
+
+func (p *CreateLikesResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *CreateLikesResult) GetResult() interface{} {
+	return p.Success
+}
+
+func getLikesCountHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(likes_service.GetLikesCountRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(likes_service.LikesService).GetLikesCount(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *GetLikesCountArgs:
+		success, err := handler.(likes_service.LikesService).GetLikesCount(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*GetLikesCountResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newGetLikesCountArgs() interface{} {
+	return &GetLikesCountArgs{}
+}
+
+func newGetLikesCountResult() interface{} {
+	return &GetLikesCountResult{}
+}
+
+type GetLikesCountArgs struct {
+	Req *likes_service.GetLikesCountRequest
+}
+
+func (p *GetLikesCountArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(likes_service.GetLikesCountRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *GetLikesCountArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *GetLikesCountArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *GetLikesCountArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *GetLikesCountArgs) Unmarshal(in []byte) error {
+	msg := new(likes_service.GetLikesCountRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var GetLikesCountArgs_Req_DEFAULT *likes_service.GetLikesCountRequest
+
+func (p *GetLikesCountArgs) GetReq() *likes_service.GetLikesCountRequest {
+	if !p.IsSetReq() {
+		return GetLikesCountArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *GetLikesCountArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *GetLikesCountArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type GetLikesCountResult struct {
+	Success *likes_service.GetLikesCountResponse
+}
+
+var GetLikesCountResult_Success_DEFAULT *likes_service.GetLikesCountResponse
+
+func (p *GetLikesCountResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(likes_service.GetLikesCountResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *GetLikesCountResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *GetLikesCountResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *GetLikesCountResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *GetLikesCountResult) Unmarshal(in []byte) error {
+	msg := new(likes_service.GetLikesCountResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *GetLikesCountResult) GetSuccess() *likes_service.GetLikesCountResponse {
+	if !p.IsSetSuccess() {
+		return GetLikesCountResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *GetLikesCountResult) SetSuccess(x interface{}) {
+	p.Success = x.(*likes_service.GetLikesCountResponse)
+}
+
+func (p *GetLikesCountResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *GetLikesCountResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -426,6 +746,26 @@ func (p *kClient) DelLikes(ctx context.Context, Req *likes_service.DelLikesReque
 	_args.Req = Req
 	var _result DelLikesResult
 	if err = p.c.Call(ctx, "DelLikes", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) CreateLikes(ctx context.Context, Req *likes_service.CreateLikesRequest) (r *likes_service.CreateLikesResponse, err error) {
+	var _args CreateLikesArgs
+	_args.Req = Req
+	var _result CreateLikesResult
+	if err = p.c.Call(ctx, "CreateLikes", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetLikesCount(ctx context.Context, Req *likes_service.GetLikesCountRequest) (r *likes_service.GetLikesCountResponse, err error) {
+	var _args GetLikesCountArgs
+	_args.Req = Req
+	var _result GetLikesCountResult
+	if err = p.c.Call(ctx, "GetLikesCount", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

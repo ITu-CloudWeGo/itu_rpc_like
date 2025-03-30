@@ -38,12 +38,12 @@ ReadFieldError:
 }
 
 func (x *AddLikesRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Uid, offset, err = fastpb.ReadUint64(buf, _type)
+	x.Uid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
 func (x *AddLikesRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Pid, offset, err = fastpb.ReadUint64(buf, _type)
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -108,12 +108,12 @@ ReadFieldError:
 }
 
 func (x *DelLikesRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Uid, offset, err = fastpb.ReadUint64(buf, _type)
+	x.Uid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
 func (x *DelLikesRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Pid, offset, err = fastpb.ReadUint64(buf, _type)
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -152,6 +152,136 @@ func (x *DelLikesResponse) fastReadField2(buf []byte, _type int8) (offset int, e
 	return offset, err
 }
 
+func (x *CreateLikesRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_CreateLikesRequest[number], err)
+}
+
+func (x *CreateLikesRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *CreateLikesResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_CreateLikesResponse[number], err)
+}
+
+func (x *CreateLikesResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Status, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *CreateLikesResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Msg, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GetLikesCountRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GetLikesCountRequest[number], err)
+}
+
+func (x *GetLikesCountRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *GetLikesCountResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GetLikesCountResponse[number], err)
+}
+
+func (x *GetLikesCountResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Status, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *GetLikesCountResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Msg, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *GetLikesCountResponse) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Count, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
 func (x *AddLikesRequest) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -165,7 +295,7 @@ func (x *AddLikesRequest) fastWriteField1(buf []byte) (offset int) {
 	if x.Uid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteUint64(buf[offset:], 1, x.GetUid())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetUid())
 	return offset
 }
 
@@ -173,7 +303,7 @@ func (x *AddLikesRequest) fastWriteField2(buf []byte) (offset int) {
 	if x.Pid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteUint64(buf[offset:], 2, x.GetPid())
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetPid())
 	return offset
 }
 
@@ -215,7 +345,7 @@ func (x *DelLikesRequest) fastWriteField1(buf []byte) (offset int) {
 	if x.Uid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteUint64(buf[offset:], 1, x.GetUid())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetUid())
 	return offset
 }
 
@@ -223,7 +353,7 @@ func (x *DelLikesRequest) fastWriteField2(buf []byte) (offset int) {
 	if x.Pid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteUint64(buf[offset:], 2, x.GetPid())
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetPid())
 	return offset
 }
 
@@ -252,6 +382,97 @@ func (x *DelLikesResponse) fastWriteField2(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *CreateLikesRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *CreateLikesRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.Pid == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetPid())
+	return offset
+}
+
+func (x *CreateLikesResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *CreateLikesResponse) fastWriteField1(buf []byte) (offset int) {
+	if x.Status == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetStatus())
+	return offset
+}
+
+func (x *CreateLikesResponse) fastWriteField2(buf []byte) (offset int) {
+	if x.Msg == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetMsg())
+	return offset
+}
+
+func (x *GetLikesCountRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *GetLikesCountRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.Pid == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetPid())
+	return offset
+}
+
+func (x *GetLikesCountResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
+	return offset
+}
+
+func (x *GetLikesCountResponse) fastWriteField1(buf []byte) (offset int) {
+	if x.Status == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetStatus())
+	return offset
+}
+
+func (x *GetLikesCountResponse) fastWriteField2(buf []byte) (offset int) {
+	if x.Msg == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetMsg())
+	return offset
+}
+
+func (x *GetLikesCountResponse) fastWriteField3(buf []byte) (offset int) {
+	if x.Count == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 3, x.GetCount())
+	return offset
+}
+
 func (x *AddLikesRequest) Size() (n int) {
 	if x == nil {
 		return n
@@ -265,7 +486,7 @@ func (x *AddLikesRequest) sizeField1() (n int) {
 	if x.Uid == 0 {
 		return n
 	}
-	n += fastpb.SizeUint64(1, x.GetUid())
+	n += fastpb.SizeInt64(1, x.GetUid())
 	return n
 }
 
@@ -273,7 +494,7 @@ func (x *AddLikesRequest) sizeField2() (n int) {
 	if x.Pid == 0 {
 		return n
 	}
-	n += fastpb.SizeUint64(2, x.GetPid())
+	n += fastpb.SizeInt64(2, x.GetPid())
 	return n
 }
 
@@ -315,7 +536,7 @@ func (x *DelLikesRequest) sizeField1() (n int) {
 	if x.Uid == 0 {
 		return n
 	}
-	n += fastpb.SizeUint64(1, x.GetUid())
+	n += fastpb.SizeInt64(1, x.GetUid())
 	return n
 }
 
@@ -323,7 +544,7 @@ func (x *DelLikesRequest) sizeField2() (n int) {
 	if x.Pid == 0 {
 		return n
 	}
-	n += fastpb.SizeUint64(2, x.GetPid())
+	n += fastpb.SizeInt64(2, x.GetPid())
 	return n
 }
 
@@ -352,6 +573,97 @@ func (x *DelLikesResponse) sizeField2() (n int) {
 	return n
 }
 
+func (x *CreateLikesRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *CreateLikesRequest) sizeField1() (n int) {
+	if x.Pid == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetPid())
+	return n
+}
+
+func (x *CreateLikesResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *CreateLikesResponse) sizeField1() (n int) {
+	if x.Status == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetStatus())
+	return n
+}
+
+func (x *CreateLikesResponse) sizeField2() (n int) {
+	if x.Msg == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetMsg())
+	return n
+}
+
+func (x *GetLikesCountRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *GetLikesCountRequest) sizeField1() (n int) {
+	if x.Pid == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetPid())
+	return n
+}
+
+func (x *GetLikesCountResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	n += x.sizeField3()
+	return n
+}
+
+func (x *GetLikesCountResponse) sizeField1() (n int) {
+	if x.Status == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetStatus())
+	return n
+}
+
+func (x *GetLikesCountResponse) sizeField2() (n int) {
+	if x.Msg == "" {
+		return n
+	}
+	n += fastpb.SizeString(2, x.GetMsg())
+	return n
+}
+
+func (x *GetLikesCountResponse) sizeField3() (n int) {
+	if x.Count == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(3, x.GetCount())
+	return n
+}
+
 var fieldIDToName_AddLikesRequest = map[int32]string{
 	1: "Uid",
 	2: "Pid",
@@ -370,4 +682,23 @@ var fieldIDToName_DelLikesRequest = map[int32]string{
 var fieldIDToName_DelLikesResponse = map[int32]string{
 	1: "Status",
 	2: "Msg",
+}
+
+var fieldIDToName_CreateLikesRequest = map[int32]string{
+	1: "Pid",
+}
+
+var fieldIDToName_CreateLikesResponse = map[int32]string{
+	1: "Status",
+	2: "Msg",
+}
+
+var fieldIDToName_GetLikesCountRequest = map[int32]string{
+	1: "Pid",
+}
+
+var fieldIDToName_GetLikesCountResponse = map[int32]string{
+	1: "Status",
+	2: "Msg",
+	3: "Count",
 }
