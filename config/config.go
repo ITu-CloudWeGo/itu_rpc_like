@@ -19,17 +19,18 @@ type Config struct {
 		LogMaxBackups int    `yaml:"LogMaxBackups"`
 	} `yaml:"Kitex"`
 	Registry struct {
-		RegistryAddress []string `yaml:"registryAddress"`
-		UserName        string   `yaml:"username"`
-		PassWord        string   `yaml:"password"`
+		RegistryAddress []string `yaml:"RegistryAddress"`
+		UserName        string   `yaml:"Username"`
+		PassWord        string   `yaml:"Password"`
 	} `yaml:"Registry"`
 	PostgresSQL struct {
-		Host     string `yaml:"host"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-		DBName   string `yaml:"dbname"`
-		Port     int    `yaml:"port"`
-	} `yaml:""`
+		Host     string `yaml:"Host"`
+		User     string `yaml:"User"`
+		Password string `yaml:"Password"`
+		DBName   string `yaml:"DBName"`
+		Port     int    `yaml:"Port"`
+		SSLMode  string `yaml:"SSLMode"`
+	} `yaml:"PostgresSQL"`
 }
 
 var (
@@ -75,10 +76,23 @@ func loadConfig() *Config {
 	if err != nil {
 		panic(err)
 	}
+	listenOnEnv := os.Getenv("LISTEN_ON")
+	if listenOnEnv != "" {
+		conf.Kitex.Address = listenOnEnv
+	}
 
-	etcdHostEnv := os.Getenv("ETCD_HOST")
-	if etcdHostEnv != "" {
-		conf.Registry.RegistryAddress = etcdHostEnv
+	// Registry
+	registryAddrEnv := os.Getenv("REGISTRY_ADDR")
+	if registryAddrEnv != "" {
+		conf.Registry.RegistryAddress = []string{registryAddrEnv}
+	}
+	registryUserNameEnv := os.Getenv("REGISTRY_USERNAME")
+	if registryUserNameEnv != "" {
+		conf.Registry.UserName = ""
+	}
+	registryPasswordEnv := os.Getenv("REGISTRY_PASSWORD")
+	if registryPasswordEnv != "" {
+		conf.Registry.PassWord = registryPasswordEnv
 	}
 
 	return &conf

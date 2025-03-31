@@ -159,6 +159,11 @@ func (x *CreateLikesRequest) FastRead(buf []byte, _type int8, number int32) (off
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -174,6 +179,11 @@ ReadFieldError:
 
 func (x *CreateLikesRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
 	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
+}
+
+func (x *CreateLikesRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Uid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -387,6 +397,7 @@ func (x *CreateLikesRequest) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
 	return offset
 }
 
@@ -395,6 +406,14 @@ func (x *CreateLikesRequest) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetPid())
+	return offset
+}
+
+func (x *CreateLikesRequest) fastWriteField2(buf []byte) (offset int) {
+	if x.Uid == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetUid())
 	return offset
 }
 
@@ -578,6 +597,7 @@ func (x *CreateLikesRequest) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
 	return n
 }
 
@@ -586,6 +606,14 @@ func (x *CreateLikesRequest) sizeField1() (n int) {
 		return n
 	}
 	n += fastpb.SizeInt64(1, x.GetPid())
+	return n
+}
+
+func (x *CreateLikesRequest) sizeField2() (n int) {
+	if x.Uid == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(2, x.GetUid())
 	return n
 }
 
@@ -686,6 +714,7 @@ var fieldIDToName_DelLikesResponse = map[int32]string{
 
 var fieldIDToName_CreateLikesRequest = map[int32]string{
 	1: "Pid",
+	2: "Uid",
 }
 
 var fieldIDToName_CreateLikesResponse = map[int32]string{
