@@ -59,30 +59,14 @@ func (s *LikesServiceImpl) DelLikes(ctx context.Context, req *likes_service.DelL
 	if err := LikesDao.DelLikes(req.Pid, req.Uid); err != nil {
 		return nil, fmt.Errorf("failed to delete likes: %w", err)
 	}
-	count := PidCountDao.GetLikesCount(req.Pid)
+	count, err := PidCountDao.GetLikesCount(req.Pid)
+	if err != nil {
+		return nil, err
+	}
 	if err := PidCountDao.UpdateLikesCount(req.Pid, count-1); err != nil {
 		return nil, err
 	}
 	return &likes_service.DelLikesResponse{
-		Status: 200,
-		Msg:    "success",
-	}, nil
-}
-
-// 创建帖子的时候调用
-
-// CreateLikes implements the LikesServiceImpl interface.
-func (s *LikesServiceImpl) CreateLikes(ctx context.Context, req *likes_service.CreateLikesRequest) (resp *likes_service.CreateLikesResponse, err error) {
-	// TODO: Your code here...
-	PidCountDao := dao.GetPidCountDao()
-	err = PidCountDao.Insert(&model.PidCount{
-		Pid:   req.Pid,
-		Count: 0,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &likes_service.CreateLikesResponse{
 		Status: 200,
 		Msg:    "success",
 	}, nil
