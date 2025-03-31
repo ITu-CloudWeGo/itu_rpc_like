@@ -16,7 +16,6 @@ type LikesDaoImpl interface {
 	Insert(tags *model.Likes) error
 	DelLikes(pid, uid int64) error
 	CheckLikes(pid, uid int64) (bool, error)
-	GetLikesCount(pid int64) int64
 }
 
 var (
@@ -52,10 +51,4 @@ func (dao *LikesDao) CheckLikes(pid, uid int64) (bool, error) {
 		return false, fmt.Errorf("重复收藏")
 	}
 	return true, nil
-}
-
-func (dao *LikesDao) GetLikesCount(pid int64) int64 {
-	var count int64
-	dao.db.Model(&model.Likes{}).Where("pid = ?", pid).Count(&count)
-	return count
 }

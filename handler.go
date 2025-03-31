@@ -18,7 +18,7 @@ func (s *LikesServiceImpl) AddLikes(ctx context.Context, req *likes_service.AddL
 	// TODO: Your code here...
 
 	LikesDao := dao.GetLikesDao()
-
+	PidCountDao := dao.GetPidCountDao()
 	exist, err := LikesDao.CheckLikes(req.Pid, req.Uid)
 	if exist == false {
 		return nil, err
@@ -29,8 +29,8 @@ func (s *LikesServiceImpl) AddLikes(ctx context.Context, req *likes_service.AddL
 	}); err != nil {
 		return nil, err
 	}
-
-	if err != nil {
+	count := PidCountDao.GetLikesCount(req.Pid)
+	if err := PidCountDao.UpdateLikesCount(req.Pid, count+1); err != nil {
 		return nil, err
 	}
 	return &likes_service.AddLikesResponse{
@@ -44,11 +44,14 @@ func (s *LikesServiceImpl) DelLikes(ctx context.Context, req *likes_service.DelL
 	// TODO: Your code here...
 
 	LikesDao := dao.GetLikesDao()
-
+	PidCountDao := dao.GetPidCountDao()
 	if err := LikesDao.DelLikes(req.Pid, req.Uid); err != nil {
 		return nil, fmt.Errorf("failed to delete likes: %w", err)
 	}
-
+	count := PidCountDao.GetLikesCount(req.Pid)
+	if err := PidCountDao.UpdateLikesCount(req.Pid, count-1); err != nil {
+		return nil, err
+	}
 	return &likes_service.DelLikesResponse{
 		Status: 200,
 		Msg:    "success",
@@ -60,10 +63,10 @@ func (s *LikesServiceImpl) DelLikes(ctx context.Context, req *likes_service.DelL
 // CreateLikes implements the LikesServiceImpl interface.
 func (s *LikesServiceImpl) CreateLikes(ctx context.Context, req *likes_service.CreateLikesRequest) (resp *likes_service.CreateLikesResponse, err error) {
 	// TODO: Your code here...
-	PLikesDao := dao.GetLikesDao()
-	err = PLikesDao.Insert(&model.Likes{
-		Pid: req.Pid,
-		Uid: req.Uid,
+	PidCountDao := dao.GetPidCountDao()
+	err = PidCountDao.Insert(&model.PidCount{
+		Pid:   req.Pid,
+		Count: 0,
 	})
 	if err != nil {
 		return nil, err
@@ -80,7 +83,7 @@ func (s *LikesServiceImpl) CreateLikes(ctx context.Context, req *likes_service.C
 func (s *LikesServiceImpl) GetLikesCount(ctx context.Context, req *likes_service.GetLikesCountRequest) (resp *likes_service.GetLikesCountResponse, err error) {
 	// TODO: Your code here...
 	var count int64
-	PLikesDao := dao.GetLikesDao()
+	PLikesDao := dao.GetPidCountDao()
 	count = PLikesDao.GetLikesCount(req.Pid)
 	return &likes_service.GetLikesCountResponse{
 		Status: 200,
