@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"errors"
 	"github.com/ITu-CloudWeGo/itu_rpc_like/db"
 	"github.com/ITu-CloudWeGo/itu_rpc_like/db/model"
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ type PidCountDao struct {
 }
 
 type PidCountDaoImpl interface {
-	GetLikesCount(pid int64) int64
+	GetLikesCount(pid int64) (int64, error)
 	UpdateLikesCount(pid, count int64) error
 	Insert(pidCount *model.PidCount) error
 }
@@ -20,6 +21,8 @@ type PidCountDaoImpl interface {
 var (
 	instancePidCountDAO *PidCountDao
 	oncePidCountDAO     sync.Once
+	noExists            int64 = -1
+	failed              int64 = -2
 )
 
 func GetPidCountDao() PidCountDaoImpl {
@@ -34,10 +37,16 @@ func GetPidCountDao() PidCountDaoImpl {
 func (dao *PidCountDao) Insert(pidCount *model.PidCount) error {
 	return dao.db.Create(pidCount).Error
 }
-func (dao *PidCountDao) GetLikesCount(pid int64) int64 {
-	var count int64
-	dao.db.Model(&model.Likes{}).Where("pid = ?", pid).Count(&count)
-	return count
+func (dao *PidCountDao) GetLikesCount(pid int64) (int64, error) {
+	var pidCount model.PidCount
+	err := dao.db.Model(&model.PidCount{}).Where("pid = ?", pid).Update("count", panic).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return noExists, nil
+		}
+		return failed, err
+	}
+	return pidCount.Count, nil
 }
 
 func (dao *PidCountDao) UpdateLikesCount(pid, count int64) error {

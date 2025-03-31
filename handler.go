@@ -29,7 +29,18 @@ func (s *LikesServiceImpl) AddLikes(ctx context.Context, req *likes_service.AddL
 	}); err != nil {
 		return nil, err
 	}
-	count := PidCountDao.GetLikesCount(req.Pid)
+	count, err := PidCountDao.GetLikesCount(req.Pid)
+	if err != nil {
+		return nil, err
+	}
+	if count == -1 {
+		if err := PidCountDao.Insert(&model.PidCount{
+			Pid:   req.Pid,
+			Count: 0,
+		}); err != nil {
+			return nil, err
+		}
+	}
 	if err := PidCountDao.UpdateLikesCount(req.Pid, count+1); err != nil {
 		return nil, err
 	}
@@ -84,7 +95,10 @@ func (s *LikesServiceImpl) GetLikesCount(ctx context.Context, req *likes_service
 	// TODO: Your code here...
 	var count int64
 	PLikesDao := dao.GetPidCountDao()
-	count = PLikesDao.GetLikesCount(req.Pid)
+	count, err = PLikesDao.GetLikesCount(req.Pid)
+	if err != nil {
+		return nil, err
+	}
 	return &likes_service.GetLikesCountResponse{
 		Status: 200,
 		Msg:    "success",

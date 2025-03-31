@@ -33,16 +33,6 @@ message DelLikesResponse {
   string msg = 2;
 }
 
-//创建帖子的时候使用CreateLikes
-message CreateLikesRequest {
-  int64 pid = 1;
-}
-
-message CreateLikesResponse {
-  int64 status = 1;
-  string msg = 2;
-}
-
 //查询帖子的时候使用GetLikes
 message GetLikesCountRequest {
   int64 pid = 1;
