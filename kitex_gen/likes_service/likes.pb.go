@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.33.0
 // 	protoc        v5.28.2
-// source: idl/likes.proto
+// source: idl/like.proto
 
 package likes_service
 

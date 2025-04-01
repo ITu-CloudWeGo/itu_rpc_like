@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package likes;
+package like;
 
 option go_package = "likes_service";
 

@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"fmt"
+	"errors"
 	"github.com/ITu-CloudWeGo/itu_rpc_like/db"
 	"github.com/ITu-CloudWeGo/itu_rpc_like/db/model"
 	"gorm.io/gorm"
@@ -13,9 +13,9 @@ type LikesDao struct {
 }
 
 type LikesDaoImpl interface {
-	Insert(tags *model.Likes) error
+	Insert(tags *model.Like) error
 	DelLikes(pid, uid int64) error
-	CheckLikes(pid, uid int64) (bool, error)
+	IsLiked(pid, uid int64) (bool, error)
 }
 
 var (
@@ -32,23 +32,26 @@ func GetLikesDao() LikesDaoImpl {
 	return instanceLikesDAO
 }
 
-func (dao *LikesDao) Insert(likes *model.Likes) error {
+func (dao *LikesDao) Insert(likes *model.Like) error {
 	return dao.db.Create(likes).Error
 }
 
 func (dao *LikesDao) DelLikes(pid, uid int64) error {
-	like := &model.Likes{
+	like := &model.Like{
 		Pid: pid,
 		Uid: uid,
 	}
 	return dao.db.Where("pid = ? AND uid =?", pid, like).Delete(like).Error
 }
 
-func (dao *LikesDao) CheckLikes(pid, uid int64) (bool, error) {
+func (dao *LikesDao) IsLiked(pid, uid int64) (bool, error) {
 
-	exist := dao.db.Where("pid = ? AND uid =?", pid, uid)
-	if exist != nil {
-		return false, fmt.Errorf("重复收藏")
+	err := dao.db.Where("pid = ? AND uid =?", pid, uid).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
 	}
 	return true, nil
 }

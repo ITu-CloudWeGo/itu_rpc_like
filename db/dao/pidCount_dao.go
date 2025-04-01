@@ -39,7 +39,7 @@ func (dao *PidCountDao) Insert(pidCount *model.PidCount) error {
 }
 func (dao *PidCountDao) GetLikesCount(pid int64) (int64, error) {
 	var pidCount model.PidCount
-	err := dao.db.Model(&model.PidCount{}).Where("pid = ?", pid).Update("count", panic).Error
+	err := dao.db.Model(&model.PidCount{}).Where("pid = ?", pid).Update("count", pidCount).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return noExists, nil

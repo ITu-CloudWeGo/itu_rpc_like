@@ -19,11 +19,11 @@ func (s *LikesServiceImpl) AddLikes(ctx context.Context, req *likes_service.AddL
 
 	LikesDao := dao.GetLikesDao()
 	PidCountDao := dao.GetPidCountDao()
-	exist, err := LikesDao.CheckLikes(req.Pid, req.Uid)
+	exist, err := LikesDao.IsLiked(req.Pid, req.Uid)
 	if exist == false {
 		return nil, err
 	}
-	if err := LikesDao.Insert(&model.Likes{
+	if err := LikesDao.Insert(&model.Like{
 		Pid: req.Pid,
 		Uid: req.Uid,
 	}); err != nil {
@@ -87,5 +87,30 @@ func (s *LikesServiceImpl) GetLikesCount(ctx context.Context, req *likes_service
 		Status: 200,
 		Msg:    "success",
 		Count:  count,
+	}, nil
+}
+
+// IsLiked implements the LikesServiceImpl interface.
+func (s *LikesServiceImpl) IsLiked(ctx context.Context, req *likes_service.IsLikedRequest) (resp *likes_service.IsLikedResponse, err error) {
+	// TODO: Your code here...
+
+	//false是未点赞，true是点赞
+	LikesDao := dao.GetLikesDao()
+	exist, err := LikesDao.IsLiked(req.Pid, req.Uid)
+	if err != nil {
+		return nil, err
+	}
+	if exist == false {
+		return &likes_service.IsLikedResponse{
+			Status:  200,
+			Msg:     "The user has liked the post",
+			IsLiked: exist,
+		}, nil
+	}
+
+	return &likes_service.IsLikedResponse{
+		Status:  200,
+		Msg:     "The user did not like this post",
+		IsLiked: exist,
 	}, nil
 }
