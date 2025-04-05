@@ -29,7 +29,7 @@ func createDB() *gorm.DB {
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect database: %v", err))
 	}
-	err = db.AutoMigrate(&model.Likes{})
+	err = db.AutoMigrate(&model.PidCount{})
 	if err != nil {
 		panic(fmt.Sprintf("failed to migrate database: %v", err))
 	}

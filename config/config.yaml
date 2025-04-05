@@ -16,7 +16,7 @@ Registry:
 PostgresSQL:
   Host: 127.0.0.1
   User: postgres
-  Password: postgres
+  Password: 123456
   DBName: postgres
   Port: 5432
   SSLMode: disable
